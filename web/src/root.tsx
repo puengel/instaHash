@@ -1,0 +1,46 @@
+import * as React from 'react';
+import { Route, Switch } from 'react-router-dom';
+
+import { Page, Routes } from './routes';
+import { Home } from './home';
+import { NotFound } from 'notFound';
+
+
+
+interface RootProps {
+}
+
+interface RootState {
+}
+
+class Root extends React.Component<RootProps, RootState> {
+  constructor(props: RootProps) {
+    super(props);
+
+    this.state = {
+    }
+
+  }
+
+
+  // Hint to navigate react router
+  // https://stackoverflow.com/questions/31079081/programmatically-navigate-using-react-router
+  render() {
+    return (
+      <div className="react-route">
+        <Switch>
+          <Route path={Routes.get(Page.Home)} render={({ match }) => {
+            // console.log(match);
+            return (
+              <Home hash={match.params.hash} />)
+          }} />
+          <Route render={() => {
+            return <NotFound />
+          }} />
+        </Switch>
+      </div>
+    )
+  }
+}
+
+export { Root as Root }
