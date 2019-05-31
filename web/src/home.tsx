@@ -7,10 +7,30 @@ interface HomeProps {
 
 interface HomeState {
   hash: string;
-  pics: string[];
+  pics: any[];
   gw: number;
   gh: number;
   gridsize: number;
+}
+
+class pic {
+  url: string;
+  text?: string;
+
+  constructor(url: string, text?: string) {
+    this.url = url;
+    this.text = text;
+  }
+}
+
+class vid {
+  url: string;
+  text?: string;
+
+  constructor(url: string, text?: string) {
+    this.url = url;
+    this.text = text;
+  }
 }
 
 class Home extends React.Component<HomeProps, HomeState> {
@@ -45,7 +65,36 @@ class Home extends React.Component<HomeProps, HomeState> {
 
       for (let i = 0; i < edges.length && i < this.state.gridsize; i++) {
         console.log(edges[i].node);
-        this.state.pics.push(edges[i].node.display_url);
+        let node = edges[i].node;
+
+        // Single Pic
+        if (!node.is_video) {
+          this.state.pics.push(new pic(node.display_url, node.edge_media_to_caption.edges[0].node.text));
+
+
+          // Video
+        } else {
+          let vidReqUrl = `https://www.instagram.com/p/${node.shortcode}/`
+          axios.get(vidReqUrl).then(response => {
+            let vidReqData = response.data;
+            let regex = /<script type="text\/javascript">window[.]_sharedData = {[\s\S]*};<\/script>/g
+
+            let scripts = vidReqData.match(regex);
+            let sharedData = JSON.parse(scripts[0].match(/\{[\s\S]*\}/g)[0]);
+            console.log("vid");
+            console.log(sharedData);
+            let vidUrl = sharedData.entry_data.PostPage[0].graphql.shortcode_media.video_url;
+
+            this.state.pics.push(new vid(vidUrl, node.edge_media_to_caption.edges[0].node.text));
+
+            this.setState({
+              ...this.state,
+              pics: this.state.pics,
+            })
+          })
+        }
+
+        // this.state.pics.push(edges[i].node.display_url);
         // axios.get(edges[i].node.display_url).then(picResponse => {
         //   this.state.pics.push(response.data);
         // })
@@ -77,14 +126,25 @@ class Home extends React.Component<HomeProps, HomeState> {
     return (
       <div className="flex-grid">
         {
-          pics.map((pic: string, idx: number) => {
-
+          pics.map((content: any, idx: number) => {
+            console.log(idx);
             return (
-              <div className="col" style={{ backgroundImage: `url(${pic})`, width: colW, height: colH }} key={idx} ></div>
+              <div className="col" style={{ width: colW, height: colH }} key={idx} >
+                {
+                  (content instanceof pic) ? (
+                    <div className="col-img" style={{ backgroundImage: `url(${content.url})` }}></div>
+
+                  ) : (
+                      <video preload="auto" autoPlay controls={false} loop className="col-vid" src={content.url}>
+                        {/* <source src={content.url} type="video/mp4" ></source> */}
+                      </video>
+                    )
+                }
+              </div>
             )
           })
         }
-      </div>
+      </div >
     )
   }
 }
