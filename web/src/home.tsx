@@ -139,7 +139,7 @@ class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props);
 
-    let w = Math.floor(window.innerWidth / 600);
+    let w = Math.floor(window.innerWidth / 300);
     let h = Math.floor(window.innerHeight / 300);
 
     this.lastHash = undefined;
@@ -274,39 +274,6 @@ class Home extends React.Component<HomeProps, HomeState> {
                       </div>
                     )
                 }
-                <div className="info">
-                  <div className="text">
-
-                    {/* <p className="text-p text-no-highlight" > */}
-                    {
-                      post.content !== undefined && post.content.text !== undefined &&
-                      post.content.text.split("#").map((splitByHash, textKey) => {
-                        if (textKey === 0) {
-                          return (
-                            <p className="text-p text-no-highlight" key={textKey}>
-                              {splitByHash}
-                            </p>
-                          )
-                        }
-                        let splits = splitByHash.split(" ", 1);
-                        return (
-                          <p className="text-p text-no-highlight" key={textKey}>
-                            <a href={`${window.location.origin}/tag/${splits[0]}`} >
-                              {`#${splits[0]} `}
-                            </a>
-                            {` ${splits.slice(1).join(" ")}`}
-                          </p>
-                          // {
-                          //   splits[1:]
-                          // }
-                        )
-
-                      })
-                    }
-                    {/* </p> */}
-
-                  </div>
-                </div>
               </div>
             )
           })
