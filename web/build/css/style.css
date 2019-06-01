@@ -92,11 +92,7 @@ video {
   width: 50%;
 }
 
-.col div {
-  /* display: inline-block; */
-}
-
-.info {
+.co .info {
   overflow: hidden;
   width: 50%;
   height: 100%;
@@ -162,8 +158,4 @@ video {
 .col-img-multi.show {
   visibility: visible;
   opacity: 1;
-}
-
-.col-vid {
-  /* transform: translate(-50%, -50%); */
 }
