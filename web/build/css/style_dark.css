@@ -1,0 +1,171 @@
+html,
+body,
+.react-route {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body,
+button,
+input,
+textarea {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #c0c0c0;
+}
+
+a,
+abbr,
+body,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+html,
+p,
+span,
+strong,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-style: inherit;
+  font-variant-ligatures: inherit;
+  font-variant-caps: inherit;
+  font-variant-numeric: inherit;
+  font-variant-east-asian: inherit;
+  font-weight: inherit;
+  font-stretch: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+.react-route {
+  background-color: #101010;
+}
+
+.flex-grid {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.col {
+  display: flex;
+  /* flex: 1; */
+  /* width: 30%;
+  height: 30%; */
+  /* margin: 5px; */
+  background-color: #000000;
+}
+
+.col-img,
+.col-img-multi {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.col-img,
+.col-vid,
+.col-inner,
+.col-img-multi,
+.col-img-multi-container {
+  width: 100%;
+  height: 100%;
+}
+
+.col-img,
+.col-inner {
+  width: 50%;
+}
+
+.col div {
+  /* display: inline-block; */
+}
+
+.info {
+  background-color: #303030;
+  overflow: hidden;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-author {
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  /* width: calc(100% - 2em); */
+  height: 2em;
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.post-author-pic {
+  border-radius: 2em;
+  width: 2em;
+  height: 2em;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.post-author-name {
+  font-weight: bold;
+  margin-left: 1em;
+}
+
+.col-inner {
+  position: relative;
+}
+
+.col-img-multi-container {
+  position: absolute;
+  overflow: hidden;
+  animation: multi-slide-2 0s;
+}
+
+.text {
+  padding: 1em;
+}
+
+.text-p {
+  display: inline;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+.text-highlight {
+  color: #0000ff;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.col-img-multi {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s linear, opacity 0.3s linear;
+  position: absolute;
+}
+
+.col-img-multi.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.col-vid {
+  /* transform: translate(-50%, -50%); */
+}
