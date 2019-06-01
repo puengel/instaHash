@@ -139,7 +139,7 @@ class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props);
 
-    let w = Math.floor(window.innerWidth / 300);
+    let w = Math.floor(window.innerWidth / 600);
     let h = Math.floor(window.innerHeight / 300);
 
     this.lastHash = undefined;
@@ -217,29 +217,27 @@ class Home extends React.Component<HomeProps, HomeState> {
     }
     for (i = 0; i < x.length; i++) {
       x[i].classList.remove("show");
-      // x[i].setAttribute("style", "display: none");
-      // x[i].style.display = "none";
     }
     index++;
     if (index > x.length) { index = 1 }
 
     x[index - 1].classList.add("show");
-    // x[index - 1].setAttribute("style", "display: inline");
-    // x[index - 1].style.display = "block";
     setTimeout(() => { this.carousel(index, sliderClass); }, 10000); // Change image every 2 seconds
   }
 
   render() {
     // console.log(this.state.hash);
     const { posts, gw, gh } = this.state;
-    let colW = `calc(${Math.floor(100 / gw)}% - ${5 * gw}px)`;
-    let colH = `calc(${Math.floor(100 / gh)}% - ${5 * gw}px)`;
+    let colW = `calc(${Math.floor(100 / gw)}% - 10px)`;
+    let colH = `calc(${Math.floor(100 / gh)}% - 10px)`;
     return (
       <div className="flex-grid">
         {
           posts.map((post: Post, idx: number) => {
             if (post.content === undefined) {
-              return;
+              return (
+                <div className="col" style={{ width: colW, height: colH }} key={idx}></div>
+              );
             }
 
             return (
@@ -265,19 +263,9 @@ class Home extends React.Component<HomeProps, HomeState> {
 
                               }
                             </div>
-                            // <div
-                            //   className="col-img-multi"
-                            //   style={{
-                            //     width: `calc(100% * ${content.urls.length})`,
-                            //     backgroundImage: `${content.getBackgroundImages()}`,
-                            //     backgroundSize: `${colW}`,
-                            //     backgroundPosition: `${content.getBackgroundPosition(colW)}`
-                            //   }} >
-                            // </div>
                           ) :
                             (
                               <video preload="auto" playsInline muted autoPlay controls={false} loop className="col-vid" src={post.content.url}>
-                                {/* <source src={content.url} type="video/mp4" ></source> */}
                               </video>
                             )
                         }
@@ -286,6 +274,39 @@ class Home extends React.Component<HomeProps, HomeState> {
                       </div>
                     )
                 }
+                <div className="info">
+                  <div className="text">
+
+                    {/* <p className="text-p text-no-highlight" > */}
+                    {
+                      post.content !== undefined && post.content.text !== undefined &&
+                      post.content.text.split("#").map((splitByHash, textKey) => {
+                        if (textKey === 0) {
+                          return (
+                            <p className="text-p text-no-highlight" key={textKey}>
+                              {splitByHash}
+                            </p>
+                          )
+                        }
+                        let splits = splitByHash.split(" ", 1);
+                        return (
+                          <p className="text-p text-no-highlight" key={textKey}>
+                            <a href={`${window.location.origin}/tag/${splits[0]}`} >
+                              {`#${splits[0]} `}
+                            </a>
+                            {` ${splits.slice(1).join(" ")}`}
+                          </p>
+                          // {
+                          //   splits[1:]
+                          // }
+                        )
+
+                      })
+                    }
+                    {/* </p> */}
+
+                  </div>
+                </div>
               </div>
             )
           })
