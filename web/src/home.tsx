@@ -7,10 +7,81 @@ interface HomeProps {
 
 interface HomeState {
   hash: string;
-  pics: any[];
+  posts: Post[];
   gw: number;
   gh: number;
   gridsize: number;
+}
+
+class Post {
+  id: string;
+  timestamp: number;
+  raw: any;
+  content?: pic | vid | multiPic;
+
+  constructor(id: string, timestamp: number, raw: any) {
+    this.id = id;
+    this.timestamp = timestamp;
+    this.raw = raw;
+  }
+
+  async getData() {
+    let node = this.raw;
+
+    // Pic
+    if (!node.is_video) {
+      let picReqUrl = `https://www.instagram.com/p/${node.shortcode}/`
+      let response = await axios.get(picReqUrl);
+      if (response) {
+        let picReqData = response.data;
+        let regex = /<script type="text\/javascript">window[.]_sharedData = {[\s\S]*};<\/script>/g
+
+        let scripts = picReqData.match(regex);
+        let sharedData = JSON.parse(scripts[0].match(/\{[\s\S]*\}/g)[0]);
+
+        let shortcode_media = sharedData.entry_data.PostPage[0].graphql.shortcode_media;
+
+        // Is Multipic
+        if (shortcode_media.edge_sidecar_to_children) {
+          let picUrls = [];
+          for (let edgeIndex = 0; edgeIndex < shortcode_media.edge_sidecar_to_children.edges.length; edgeIndex++) {
+            picUrls.push(shortcode_media.edge_sidecar_to_children.edges[edgeIndex].node.display_url);
+          }
+          // this.state.pics.push(new multiPic(picUrls, shortcode_media.edge_media_to_caption.edges[0].node.text));
+          this.content = new multiPic(picUrls, shortcode_media.edge_media_to_caption.edges[0].node.text);
+
+          // Is Singlepic
+        } else {
+          // this.state.pics.push(new pic(node.display_url, node.edge_media_to_caption.edges[0].node.text));
+          this.content = new pic(node.display_url, node.edge_media_to_caption.edges[0].node.text);
+        }
+
+        // console.log(sharedData);
+      }
+
+      // Video
+    } else {
+      let vidReqUrl = `https://www.instagram.com/p/${node.shortcode}/`
+      let response = await axios.get(vidReqUrl);
+      if (response) {
+        let vidReqData = response.data;
+        let regex = /<script type="text\/javascript">window[.]_sharedData = {[\s\S]*};<\/script>/g
+
+        let scripts = vidReqData.match(regex);
+        let sharedData = JSON.parse(scripts[0].match(/\{[\s\S]*\}/g)[0]);
+        // console.log("vid");
+        // console.log(sharedData);
+        let vidUrl = sharedData.entry_data.PostPage[0].graphql.shortcode_media.video_url;
+
+        // this.state.pics.push(new vid(vidUrl, node.edge_media_to_caption.edges[0].node.text));
+        this.content = new vid(vidUrl, node.edge_media_to_caption.edges[0].node.text);
+
+
+      }
+    }
+
+    return true;
+  }
 }
 
 class pic {
@@ -20,6 +91,35 @@ class pic {
   constructor(url: string, text?: string) {
     this.url = url;
     this.text = text;
+  }
+
+}
+
+class multiPic {
+  urls: string[];
+  text?: string;
+
+  constructor(urls: string[], text?: string) {
+    this.urls = urls;
+    this.text = text;
+  }
+
+  public getBackgroundImages = () => {
+    let result = `url(${this.urls[0]})`
+    for (let i = 1; i < this.urls.length; i++) {
+      result = result + `, url(${this.urls[i]})`
+    }
+    console.log(result);
+    return result;
+  }
+
+  public getBackgroundPosition = (offset: string) => {
+    let result = `0 0`;
+    for (let i = 1; i < this.urls.length; i++) {
+      result = result + `, calc(offset * ${i}) 0`
+    }
+    console.log(result);
+    return result;
   }
 }
 
@@ -34,6 +134,7 @@ class vid {
 }
 
 class Home extends React.Component<HomeProps, HomeState> {
+  lastHash: any;
 
   constructor(props: HomeProps) {
     super(props);
@@ -41,9 +142,11 @@ class Home extends React.Component<HomeProps, HomeState> {
     let w = Math.floor(window.innerWidth / 300);
     let h = Math.floor(window.innerHeight / 300);
 
+    this.lastHash = undefined;
+
     this.state = {
       hash: props.hash,
-      pics: [],
+      posts: [],
       gw: w,
       gh: h,
       gridsize: w * h,
@@ -57,87 +160,130 @@ class Home extends React.Component<HomeProps, HomeState> {
     const url = `https://www.instagram.com/explore/tags/${hash}/?__a=1`
 
 
-    axios.get(url).then((response => {
+    let response = await axios.get(url);
+    if (response) {
+
       // console.log(response);
       let data = response.data;
 
+      let posts = [];
+
       let edges = data.graphql.hashtag.edge_hashtag_to_media.edges;
-
-      for (let i = 0; i < edges.length && i < this.state.gridsize; i++) {
-        console.log(edges[i].node);
-        let node = edges[i].node;
-
-        // Single Pic
-        if (!node.is_video) {
-          this.state.pics.push(new pic(node.display_url, node.edge_media_to_caption.edges[0].node.text));
-
-
-          // Video
-        } else {
-          let vidReqUrl = `https://www.instagram.com/p/${node.shortcode}/`
-          axios.get(vidReqUrl).then(response => {
-            let vidReqData = response.data;
-            let regex = /<script type="text\/javascript">window[.]_sharedData = {[\s\S]*};<\/script>/g
-
-            let scripts = vidReqData.match(regex);
-            let sharedData = JSON.parse(scripts[0].match(/\{[\s\S]*\}/g)[0]);
-            console.log("vid");
-            console.log(sharedData);
-            let vidUrl = sharedData.entry_data.PostPage[0].graphql.shortcode_media.video_url;
-
-            this.state.pics.push(new vid(vidUrl, node.edge_media_to_caption.edges[0].node.text));
-
-            this.setState({
-              ...this.state,
-              pics: this.state.pics,
-            })
-          })
-        }
-
-        // this.state.pics.push(edges[i].node.display_url);
-        // axios.get(edges[i].node.display_url).then(picResponse => {
-        //   this.state.pics.push(response.data);
-        // })
+      //Is there a better way for this shitty hack?
+      for (let c = 0; c < this.state.gridsize; c++) {
+        let loadedPost = this.state.posts.find((element) => {
+          return element.id === edges[c].node.id;
+        })
+        posts.push(
+          loadedPost !== undefined ?
+            loadedPost :
+            new Post(edges[c].node.id, edges[c].node.taken_at_timestamp, edges[c].node));
       }
 
-      this.setState({
-        ...this.state,
-        pics: this.state.pics,
-      })
-    }));
+      posts.sort((a, b) => { return b.timestamp - a.timestamp; });
 
-    // request.get(url, (error, response, body) => {
-    //   console.log(response);
-    //   console.log(body);
-    // });
+      let shownPosts = posts.slice(0, this.state.gridsize);
 
-    // console.log(url);
+
+      for (let i = 0; i < shownPosts.length; i++) {
+        if (shownPosts[i].content === undefined) {
+          await shownPosts[i].getData();
+
+          // trigger draw after every new post
+          this.setState({
+            ...this.state,
+            posts: shownPosts,
+          });
+        }
+      }
+
+
+      console.log(shownPosts);
+
+    }
+
+    setTimeout(() => { this.loadInstaHash(); }, 60000);
   }
 
   componentDidMount() {
     this.loadInstaHash();
   }
 
+  carousel = (index: number, sliderClass: string) => {
+    var i;
+    var x = document.getElementsByClassName(sliderClass);
+    if (x.length === 0) {
+      return;
+    }
+    for (i = 0; i < x.length; i++) {
+      x[i].classList.remove("show");
+      // x[i].setAttribute("style", "display: none");
+      // x[i].style.display = "none";
+    }
+    index++;
+    if (index > x.length) { index = 1 }
+
+    x[index - 1].classList.add("show");
+    // x[index - 1].setAttribute("style", "display: inline");
+    // x[index - 1].style.display = "block";
+    setTimeout(() => { this.carousel(index, sliderClass); }, 10000); // Change image every 2 seconds
+  }
+
   render() {
     // console.log(this.state.hash);
-    const { pics, gw, gh } = this.state;
+    const { posts, gw, gh } = this.state;
     let colW = `calc(${Math.floor(100 / gw)}% - ${5 * gw}px)`;
     let colH = `calc(${Math.floor(100 / gh)}% - ${5 * gw}px)`;
     return (
       <div className="flex-grid">
         {
-          pics.map((content: any, idx: number) => {
-            console.log(idx);
+          posts.map((post: Post, idx: number) => {
+            if (post.content === undefined) {
+              return;
+            }
+
             return (
               <div className="col" style={{ width: colW, height: colH }} key={idx} >
                 {
-                  (content instanceof pic) ? (
-                    <div className="col-img" style={{ backgroundImage: `url(${content.url})` }}></div>
+                  (post.content instanceof pic) ? (
+                    <div className="col-img" style={{ backgroundImage: `url(${post.content.url})` }}></div>
 
                   ) : (
-                      <video preload="auto" autoPlay controls={false} loop className="col-vid" src={content.url}>
-                        {/* <source src={content.url} type="video/mp4" ></source> */}
-                      </video>
+                      <div className="col-inner">
+                        {
+                          (post.content instanceof multiPic) ? (
+                            <div className="col-img-multi-container">
+                              {
+                                setTimeout(() => {
+                                  this.carousel(1, `slide-img-${idx}`);
+                                }, 10000) &&
+                                post.content.urls.map((url, urlIdx) => {
+                                  return (
+                                    <div className={`col-img-multi slide-img-${idx}${urlIdx === 0 ? " show" : ""}`} style={{ backgroundImage: `url(${url})` }} key={urlIdx}></div>
+                                  );
+                                })
+
+                              }
+                            </div>
+                            // <div
+                            //   className="col-img-multi"
+                            //   style={{
+                            //     width: `calc(100% * ${content.urls.length})`,
+                            //     backgroundImage: `${content.getBackgroundImages()}`,
+                            //     backgroundSize: `${colW}`,
+                            //     backgroundPosition: `${content.getBackgroundPosition(colW)}`
+                            //   }} >
+                            // </div>
+                          ) :
+                            (
+                              <video preload="auto" playsInline muted autoPlay controls={false} loop className="col-vid" src={post.content.url}>
+                                {/* <source src={content.url} type="video/mp4" ></source> */}
+                              </video>
+                            )
+                        }
+
+
+                      </div>
                     )
                 }
               </div>
