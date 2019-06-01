@@ -18,6 +18,8 @@ class Post {
   timestamp: number;
   raw: any;
   content?: pic | vid | multiPic;
+  username?: string;
+  userPic?: string;
 
   constructor(id: string, timestamp: number, raw: any) {
     this.id = id;
@@ -56,6 +58,9 @@ class Post {
           this.content = new pic(node.display_url, node.edge_media_to_caption.edges[0].node.text);
         }
 
+        this.username = shortcode_media.owner.username;
+        this.userPic = shortcode_media.owner.profile_pic_url;
+
         // console.log(sharedData);
       }
 
@@ -69,14 +74,18 @@ class Post {
 
         let scripts = vidReqData.match(regex);
         let sharedData = JSON.parse(scripts[0].match(/\{[\s\S]*\}/g)[0]);
+
+        let shortcode_media = sharedData.entry_data.PostPage[0].graphql.shortcode_media;
         // console.log("vid");
         // console.log(sharedData);
-        let vidUrl = sharedData.entry_data.PostPage[0].graphql.shortcode_media.video_url;
+        let vidUrl = shortcode_media.video_url;
 
         // this.state.pics.push(new vid(vidUrl, node.edge_media_to_caption.edges[0].node.text));
         this.content = new vid(vidUrl, node.edge_media_to_caption.edges[0].node.text);
 
 
+        this.username = shortcode_media.owner.username;
+        this.userPic = shortcode_media.owner.profile_pic_url;
       }
     }
 
@@ -198,7 +207,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       }
 
 
-      console.log(shownPosts);
+      // console.log(shownPosts);
 
     }
 
@@ -275,6 +284,10 @@ class Home extends React.Component<HomeProps, HomeState> {
                     )
                 }
                 <div className="info">
+                  <div className="post-author" >
+                    <div className="post-author-pic" style={{ backgroundImage: `url(${post.userPic})` }}></div>
+                    <div className="post-author-name">{post.username}</div>
+                  </div>
                   <div className="text">
 
                     {/* <p className="text-p text-no-highlight" > */}

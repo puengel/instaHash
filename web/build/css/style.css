@@ -6,6 +6,49 @@ body,
   margin: 0;
 }
 
+body,
+button,
+input,
+textarea {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+a,
+abbr,
+body,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+html,
+p,
+span,
+strong,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-style: inherit;
+  font-variant-ligatures: inherit;
+  font-variant-caps: inherit;
+  font-variant-numeric: inherit;
+  font-variant-east-asian: inherit;
+  font-weight: inherit;
+  font-stretch: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
 .react-route {
   background-color: #fafafa;
 }
@@ -25,7 +68,7 @@ body,
   /* width: 30%;
   height: 30%; */
   /* margin: 5px; */
-  background-color: #f0f0f0;
+  background-color: #f3f3f3;
 }
 
 .col-img,
@@ -50,13 +93,37 @@ body,
 }
 
 .col div {
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 .info {
+  overflow: hidden;
   width: 50%;
   height: 100%;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-author {
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  /* width: calc(100% - 2em); */
+  height: 2em;
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.post-author-pic {
+  border-radius: 2em;
+  width: 2em;
+  height: 2em;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.post-author-name {
+  font-weight: bold;
+  margin-left: 1em;
 }
 
 .col-inner {
