@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { Page, Routes } from './routes';
-import { Home } from './home';
+import { Hash } from './hash';
 import { NotFound } from 'notFound';
+import { Home } from 'home';
 
 
 
@@ -29,10 +30,15 @@ class Root extends React.Component<RootProps, RootState> {
     return (
       <div className="react-route">
         <Switch>
-          <Route path={Routes.get(Page.Home)} render={({ match }) => {
+          <Route path={Routes.get(Page.TAG)} render={({ match }) => {
             // console.log(match);
             return (
-              <Home hash={match.params.hash} />)
+              <Hash hash={match.params.hash} />)
+          }} />
+          <Route path={Routes.get(Page.HOME)} render={() => {
+            return (
+              <Home />
+            )
           }} />
           <Route render={() => {
             return <NotFound />

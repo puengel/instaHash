@@ -159,3 +159,18 @@ video {
   visibility: visible;
   opacity: 1;
 }
+
+/* Home */
+
+.home-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.home-center {
+  margin-left: 0;
+  margin-right: 0;
+  top: 50%;
+  transform: translate(0, 50%);
+}

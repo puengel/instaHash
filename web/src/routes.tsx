@@ -1,10 +1,12 @@
 export enum Page {
-    Home,
+    TAG,
+    HOME
 }
 
 // Routes is a collection of all ui routes in the app
 const Routes: Map<Page, string> = new Map<Page, string>();
-Routes.set(Page.Home, "/tag/:hash");
+Routes.set(Page.TAG, "/tag/:hash");
+Routes.set(Page.HOME, "/");
 
 const PROTOCOL = window.location.protocol
 const DOMAIN = window.location.host
