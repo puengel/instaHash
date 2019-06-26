@@ -21,4 +21,4 @@ install-ui:
 
 docker:
 	@sudo docker build --tag=instahash .
-	@sudo docker run -p 80:8080 -e VIRTUALHOST=test.localhost instahash
+	@sudo docker run -p 8080:8080 -e VIRTUALHOST=test.localhost instahash

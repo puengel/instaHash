@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    networks:
+      - nginx-net
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  instahash:
+    container_name: instahash
+    image: instahash
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - nginx-proxy
+    expose:
+      - "8080"
+    networks:
+      - nginx-net
+    environment:
+      - VIRTUAL_HOST=i.localhost
+
+networks:
+  nginx-net:

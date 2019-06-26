@@ -35,13 +35,10 @@ class Root extends React.Component<RootProps, RootState> {
             return (
               <Hash hash={match.params.hash} />)
           }} />
-          <Route path={Routes.get(Page.HOME)} render={() => {
+          <Route render={() => {
             return (
               <Home />
             )
-          }} />
-          <Route render={() => {
-            return <NotFound />
           }} />
         </Switch>
       </div>

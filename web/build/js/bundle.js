@@ -847,18 +847,6 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst 
 
 /***/ }),
 
-/***/ "./src/notFound.tsx":
-/*!**************************!*\
-  !*** ./src/notFound.tsx ***!
-  \**************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nclass NotFound extends React.Component {\n    constructor(props) {\n        super(props);\n    }\n    render() {\n        return (React.createElement(\"div\", null, \"Not Found\"));\n    }\n}\nexports.NotFound = NotFound;\n\n\n//# sourceURL=webpack:///./src/notFound.tsx?");
-
-/***/ }),
-
 /***/ "./src/root.tsx":
 /*!**********************!*\
   !*** ./src/root.tsx ***!
@@ -867,7 +855,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst react_router_dom_1 = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\nconst routes_1 = __webpack_require__(/*! ./routes */ \"./src/routes.tsx\");\nconst hash_1 = __webpack_require__(/*! ./hash */ \"./src/hash.tsx\");\nconst notFound_1 = __webpack_require__(/*! notFound */ \"./src/notFound.tsx\");\nconst home_1 = __webpack_require__(/*! home */ \"./src/home.tsx\");\nclass Root extends React.Component {\n    constructor(props) {\n        super(props);\n        this.state = {};\n    }\n    render() {\n        return (React.createElement(\"div\", { className: \"react-route\" },\n            React.createElement(react_router_dom_1.Switch, null,\n                React.createElement(react_router_dom_1.Route, { path: routes_1.Routes.get(routes_1.Page.TAG), render: ({ match }) => {\n                        return (React.createElement(hash_1.Hash, { hash: match.params.hash }));\n                    } }),\n                React.createElement(react_router_dom_1.Route, { path: routes_1.Routes.get(routes_1.Page.HOME), render: () => {\n                        return (React.createElement(home_1.Home, null));\n                    } }),\n                React.createElement(react_router_dom_1.Route, { render: () => {\n                        return React.createElement(notFound_1.NotFound, null);\n                    } }))));\n    }\n}\nexports.Root = Root;\n\n\n//# sourceURL=webpack:///./src/root.tsx?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\nconst react_router_dom_1 = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\nconst routes_1 = __webpack_require__(/*! ./routes */ \"./src/routes.tsx\");\nconst hash_1 = __webpack_require__(/*! ./hash */ \"./src/hash.tsx\");\nconst home_1 = __webpack_require__(/*! home */ \"./src/home.tsx\");\nclass Root extends React.Component {\n    constructor(props) {\n        super(props);\n        this.state = {};\n    }\n    render() {\n        return (React.createElement(\"div\", { className: \"react-route\" },\n            React.createElement(react_router_dom_1.Switch, null,\n                React.createElement(react_router_dom_1.Route, { path: routes_1.Routes.get(routes_1.Page.TAG), render: ({ match }) => {\n                        return (React.createElement(hash_1.Hash, { hash: match.params.hash }));\n                    } }),\n                React.createElement(react_router_dom_1.Route, { render: () => {\n                        return (React.createElement(home_1.Home, null));\n                    } }))));\n    }\n}\nexports.Root = Root;\n\n\n//# sourceURL=webpack:///./src/root.tsx?");
 
 /***/ }),
 
