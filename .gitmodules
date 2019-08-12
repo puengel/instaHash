@@ -1,0 +1,3 @@
+[submodule "submodules/instaloader"]
+	path = submodules/instaloader
+	url = git@github.com:instaloader/instaloader.git

@@ -1,0 +1,21 @@
+InstaPy: 
+  - Always up
+  - Follow back on people like every 5 minutes
+  - (Create list of folowerees)
+
+- Timebased once per minute
+  Instaloader
+    - gather posts of followees
+    - gather posts with hash
+    - Put posts in PostDirectory
+
+GoServer:
+  - Always up
+  - Serve web files (html, js, css)
+  - Serve as Websocket to send new Posts
+  - Register Filechanges in PostDirectory
+  - Send new Posts as package through Websocket
+
+ReactFrontend:
+  - Websocket connection to GoServer
+  - onMessage update shown posts

@@ -30,11 +30,11 @@ class Root extends React.Component<RootProps, RootState> {
     return (
       <div className="react-route">
         <Switch>
-          <Route path={Routes.get(Page.TAG)} render={({ match }) => {
+          {/* <Route path={Routes.get(Page.TAG)} render={({ match }) => {
             // console.log(match);
             return (
               <Hash hash={match.params.hash} />)
-          }} />
+          }} /> */}
           <Route render={() => {
             return (
               <Home />

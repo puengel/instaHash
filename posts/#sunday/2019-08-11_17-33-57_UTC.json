@@ -1,0 +1,69 @@
+{
+    "instaloader": {
+        "node_type": "Post",
+        "version": "4.2.8"
+    },
+    "node": {
+        "__typename": "GraphVideo",
+        "comments_disabled": false,
+        "dimensions": {
+            "height": 800,
+            "width": 640
+        },
+        "display_url": "https://instagram.ffra1-1.fna.fbcdn.net/vp/a9a46efa157028491f9bcd47791d295b/5D531A53/t51.2885-15/e35/67701243_1186447248194092_4484276837579445138_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net",
+        "edge_liked_by": {
+            "count": 0
+        },
+        "edge_media_preview_like": {
+            "count": 0
+        },
+        "edge_media_to_caption": {
+            "edges": [
+                {
+                    "node": {
+                        "text": "Wszystko co kocham w jednym, broda, tatua\u017ce, gitara\ud83d\ude09\ud83d\ude09\ud83d\ude09\n#Sunday #evening.  #amazingtime #bearded #tattoos #music #electricguitar #Polishman #love"
+                    }
+                }
+            ]
+        },
+        "edge_media_to_comment": {
+            "count": 0
+        },
+        "id": "2108265211740567867",
+        "is_video": true,
+        "owner": {
+            "id": "3506613961"
+        },
+        "shortcode": "B1CEAo-HDk7",
+        "taken_at_timestamp": 1565544837,
+        "thumbnail_resources": [
+            {
+                "config_height": 150,
+                "config_width": 150,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/1f044ec6ef5f9a91afce98042e7bd0ae/5D534373/t51.2885-15/e35/c0.66.528.528/s150x150/67701243_1186447248194092_4484276837579445138_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 240,
+                "config_width": 240,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/435bc6259509d9ad73ffd6094980257e/5D531775/t51.2885-15/e35/c0.66.528.528/s240x240/67701243_1186447248194092_4484276837579445138_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 320,
+                "config_width": 320,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/68bd8c8c4f9a762694fd0e1b0fdc9033/5D533B8B/t51.2885-15/e35/c0.66.528.528/s320x320/67701243_1186447248194092_4484276837579445138_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 480,
+                "config_width": 480,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/9f6ea70b3a2499fc59c602b91a868774/5D52A98C/t51.2885-15/e35/c0.66.528.528/s480x480/67701243_1186447248194092_4484276837579445138_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 640,
+                "config_width": 640,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/a59a6c1b210e8ad81058977825350716/5D52D95C/t51.2885-15/e35/c0.66.528.528/67701243_1186447248194092_4484276837579445138_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            }
+        ],
+        "thumbnail_src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/a59a6c1b210e8ad81058977825350716/5D52D95C/t51.2885-15/e35/c0.66.528.528/67701243_1186447248194092_4484276837579445138_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net",
+        "video_view_count": 0
+    }
+}

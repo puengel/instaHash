@@ -1,0 +1,378 @@
+{
+  "config": {
+    "csrf_token": "7I42z9ujGw6A4ta5XKT29trqVMvViuQx",
+    "viewer": {
+      "biography": "",
+      "external_url": null,
+      "full_name": "tstst",
+      "has_phone_number": false,
+      "has_profile_pic": false,
+      "id": "17909434058",
+      "is_joined_recently": true,
+      "is_private": true,
+      "profile_pic_url": "https://instagram.fruh4-6.fna.fbcdn.net/vp/b3744f72964e59bc13c3728d95ca0d4c/5DCB27F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.fruh4-6.fna.fbcdn.net",
+      "profile_pic_url_hd": "https://instagram.fruh4-6.fna.fbcdn.net/vp/b3744f72964e59bc13c3728d95ca0d4c/5DCB27F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.fruh4-6.fna.fbcdn.net",
+      "username": "t.daniel.puengel",
+      "badge_count": "{\"seq_id\": 13, \"badge_count\": 1, \"badge_count_at_ms\": 1565272466099}"
+    },
+    "viewerId": "17909434058"
+  },
+  "country_code": "DE",
+  "language_code": "de",
+  "locale": "de_DE",
+  "entry_data": {
+    "StoriesPage": [
+      {
+        "user": {
+          "id": "17909434058",
+          "profile_pic_url": "https://instagram.fruh4-6.fna.fbcdn.net/vp/b3744f72964e59bc13c3728d95ca0d4c/5DCB27F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.fruh4-6.fna.fbcdn.net",
+          "username": "t.daniel.puengel"
+        }
+      }
+    ]
+  },
+  "hostname": "www.instagram.com",
+  "deployment_stage": "c2",
+  "platform": "web",
+  "nonce": "wgYHwY6QY0Zsc1xZ2f4Bqw==",
+  "mid_pct": 57.08995,
+  "zero_data": {},
+  "cache_schema_version": 3,
+  "server_checks": {
+    "hfe": true
+  },
+  "knobs": {
+    "acct:ntb": 0,
+    "cb": 0,
+    "captcha": 0,
+    "fr": 0
+  },
+  "to_cache": {
+    "gatekeepers": {
+      "4": true,
+      "5": false,
+      "6": false,
+      "7": false,
+      "8": false,
+      "9": false,
+      "10": false,
+      "11": true,
+      "12": false,
+      "13": true,
+      "14": true,
+      "15": true,
+      "16": false,
+      "18": true,
+      "19": false,
+      "23": false,
+      "24": false,
+      "26": true,
+      "27": false,
+      "28": false,
+      "29": true,
+      "31": false,
+      "32": true,
+      "34": false,
+      "35": false,
+      "37": true,
+      "38": true,
+      "39": false,
+      "40": false,
+      "41": false,
+      "43": false,
+      "44": false,
+      "45": false,
+      "46": false
+    },
+    "qe": {
+      "app_upsell": {
+        "g": "",
+        "p": {}
+      },
+      "igl_app_upsell": {
+        "g": "content_and_link",
+        "p": {
+          "has_iglite_content_and_link": "true",
+          "has_no_upsell": "false",
+          "has_only_iglite_link": "false"
+        }
+      },
+      "notif": {
+        "g": "",
+        "p": {}
+      },
+      "log_cont": {
+        "g": "",
+        "p": {}
+      },
+      "onetaplogin": {
+        "g": "",
+        "p": {}
+      },
+      "onetap": {
+        "g": "",
+        "p": {}
+      },
+      "multireg_iter": {
+        "g": "test_11_29",
+        "p": {
+          "has_prioritized_phone": "true"
+        }
+      },
+      "felix_clear_fb_cookie": {
+        "g": "control",
+        "p": {
+          "is_enabled": "true",
+          "blacklist": "fbsr_124024574287414"
+        }
+      },
+      "felix_creation_duration_limits": {
+        "g": "dogfooding",
+        "p": {
+          "maximum_length_seconds": "600",
+          "minimum_length_seconds": "15"
+        }
+      },
+      "felix_creation_fb_crossposting": {
+        "g": "control",
+        "p": {
+          "is_enabled": "false"
+        }
+      },
+      "felix_creation_fb_crossposting_v2": {
+        "g": "control",
+        "p": {
+          "is_enabled": "true",
+          "display_version": "2"
+        }
+      },
+      "felix_creation_validation": {
+        "g": "control",
+        "p": {
+          "edit_video_controls": "true",
+          "description_maximum_length": "2200",
+          "max_video_size_in_bytes": "3600000000",
+          "minimum_length_for_feed_preview_seconds": "60",
+          "title_maximum_length": "75",
+          "valid_cover_mime_types": "image/jpeg,image/png",
+          "valid_video_extensions": "mp4,mov",
+          "valid_video_mime_types": "video/mp4,video/quicktime"
+        }
+      },
+      "mweb_topical_explore": {
+        "g": "",
+        "p": {}
+      },
+      "post_options": {
+        "g": "control",
+        "p": {
+          "enable_igtv_embed": "true",
+          "use_refactor": "true"
+        }
+      },
+      "iglscioi": {
+        "g": "",
+        "p": {}
+      },
+      "wss2": {
+        "g": "test",
+        "p": {
+          "has_app_upsell": "true"
+        }
+      },
+      "sticker_tray": {
+        "g": "test",
+        "p": {
+          "has_chat_sticker": "true"
+        }
+      },
+      "web_sentry": {
+        "g": "",
+        "p": {}
+      },
+      "0": {
+        "p": {
+          "0": true,
+          "4": true,
+          "7": true,
+          "8": true,
+          "9": false
+        },
+        "qex": true
+      },
+      "2": {
+        "p": {
+          "0": true
+        },
+        "qex": true
+      },
+      "4": {
+        "p": {
+          "0": true
+        },
+        "qex": true
+      },
+      "6": {
+        "p": {
+          "1": true,
+          "5": false,
+          "6": false,
+          "7": false,
+          "9": false,
+          "10": false
+        },
+        "qex": true
+      },
+      "7": {
+        "p": {
+          "0": false
+        },
+        "qex": true
+      },
+      "8": {
+        "p": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false,
+          "4": false
+        },
+        "qex": true
+      },
+      "10": {
+        "p": {
+          "2": false
+        },
+        "qex": true
+      },
+      "11": {
+        "p": {
+          "0": true
+        },
+        "qex": true
+      },
+      "12": {
+        "p": {
+          "0": 5
+        },
+        "qex": true
+      },
+      "13": {
+        "p": {
+          "0": true
+        },
+        "qex": true
+      },
+      "16": {
+        "p": {
+          "0": false
+        },
+        "qex": true
+      },
+      "17": {
+        "p": {
+          "1": true
+        },
+        "qex": true
+      },
+      "18": {
+        "p": {
+          "0": true,
+          "1": true
+        },
+        "qex": true
+      },
+      "19": {
+        "p": {
+          "0": true
+        },
+        "qex": true
+      },
+      "21": {
+        "p": {
+          "2": false
+        },
+        "qex": true
+      },
+      "22": {
+        "p": {
+          "0": false,
+          "1": false,
+          "2": 8.0,
+          "3": 0.85,
+          "4": 0.95,
+          "5": 10.0,
+          "7": false
+        },
+        "qex": true
+      },
+      "23": {
+        "p": {
+          "0": false,
+          "1": false
+        },
+        "qex": true
+      },
+      "25": {
+        "p": {},
+        "qex": true
+      },
+      "26": {
+        "p": {
+          "0": ""
+        },
+        "qex": true
+      },
+      "27": {
+        "p": {
+          "0": false
+        },
+        "qex": true
+      },
+      "28": {
+        "p": {
+          "0": false
+        },
+        "qex": true
+      },
+      "29": {
+        "p": {},
+        "qex": true
+      },
+      "30": {
+        "p": {
+          "0": true
+        },
+        "qex": true
+      },
+      "31": {
+        "p": {
+          "0": true
+        },
+        "qex": true
+      },
+      "33": {
+        "p": {},
+        "qex": true
+      },
+      "34": {
+        "p": {
+          "0": false
+        },
+        "qex": true
+      },
+      "36": {
+        "p": {
+          "0": false,
+          "1": false
+        },
+        "qex": true
+      }
+    },
+    "probably_has_app": false,
+    "cb": true
+  },
+  "rollout_hash": "0565dd16b702",
+  "bundle_variant": "es6",
+  "is_canary": false
+}

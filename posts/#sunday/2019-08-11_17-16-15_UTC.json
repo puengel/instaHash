@@ -1,0 +1,69 @@
+{
+    "instaloader": {
+        "node_type": "Post",
+        "version": "4.2.8"
+    },
+    "node": {
+        "__typename": "GraphVideo",
+        "comments_disabled": false,
+        "dimensions": {
+            "height": 937,
+            "width": 750
+        },
+        "display_url": "https://instagram.ffra1-1.fna.fbcdn.net/vp/c65e15d1942ef12d9216497f540b03cb/5D532493/t51.2885-15/e35/66795202_123449121981160_7507669936597310066_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net",
+        "edge_liked_by": {
+            "count": 0
+        },
+        "edge_media_preview_like": {
+            "count": 0
+        },
+        "edge_media_to_caption": {
+            "edges": [
+                {
+                    "node": {
+                        "text": "\u2600\ufe0fSunday Morning lick attacks \u2600\ufe0f#boxers #doggo #boxer\ud83d\udc36 #boxersofinstagram #boxerdogfans #boxerdogoftheday #dogoftheday #dogs #sunday #dogsofinstagram #boxergram #boxerworld #boxerlover #boxerpuppy"
+                    }
+                }
+            ]
+        },
+        "edge_media_to_comment": {
+            "count": 0
+        },
+        "id": "2108255455376901344",
+        "is_video": true,
+        "owner": {
+            "id": "7984835725"
+        },
+        "shortcode": "B1CByqphQTg",
+        "taken_at_timestamp": 1565543775,
+        "thumbnail_resources": [
+            {
+                "config_height": 150,
+                "config_width": 150,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/b97faecdb83e649c1d1de52411a9086a/5D52D48D/t51.2885-15/e35/c0.90.720.720a/s150x150/66795202_123449121981160_7507669936597310066_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 240,
+                "config_width": 240,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/f92a77deae1e74ff275c674c30aecbfe/5D532E47/t51.2885-15/e35/c0.90.720.720a/s240x240/66795202_123449121981160_7507669936597310066_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 320,
+                "config_width": 320,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/3e1a0891b7b501abc1b386459bfa52b8/5D531BFD/t51.2885-15/e35/c0.90.720.720a/s320x320/66795202_123449121981160_7507669936597310066_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 480,
+                "config_width": 480,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/99215d2bd0722555dab8e582bb3fb82b/5D5321A7/t51.2885-15/e35/c0.90.720.720a/s480x480/66795202_123449121981160_7507669936597310066_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            },
+            {
+                "config_height": 640,
+                "config_width": 640,
+                "src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/37cebddfb5e72d252143d043822efb85/5D532A87/t51.2885-15/sh0.08/e35/c0.90.720.720a/s640x640/66795202_123449121981160_7507669936597310066_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net"
+            }
+        ],
+        "thumbnail_src": "https://instagram.ffra1-1.fna.fbcdn.net/vp/37cebddfb5e72d252143d043822efb85/5D532A87/t51.2885-15/sh0.08/e35/c0.90.720.720a/s640x640/66795202_123449121981160_7507669936597310066_n.jpg?_nc_ht=instagram.ffra1-1.fna.fbcdn.net",
+        "video_view_count": 0
+    }
+}
