@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"image"
 	"io/ioutil"
 	"log"
@@ -12,8 +11,11 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"time"
+
+	"github.com/pkg/errors"
 
 	"github.com/Benchkram/errz"
 	"github.com/fsnotify/fsnotify"
@@ -74,6 +76,7 @@ const (
 //PostJSON I need this to marshall instaloader json files
 type PostJSON struct {
 	Node struct {
+		Shortcode  string         `json:"shortcode"`
 		ID         string         `json:"id"`
 		Dimensions DimensionsJSON `json:"dimemsions"`
 		TextEdge   struct {
@@ -115,6 +118,22 @@ type PostJSON struct {
 type DimensionsJSON struct {
 	Height int `json:"height"`
 	Width  int `json:"width"`
+}
+
+//OwnerInfoJSON only owner info needed from JSON
+type OwnerInfoJSON struct {
+	Node struct {
+		Page []struct {
+			Graphql struct {
+				User struct {
+					FullName      string `json:"full_name"`
+					UserName      string `json:"username"`
+					ProfilePicURL string `json:"profile_pic_url"`
+					UserID        string `json:"id"`
+				} `json:"user"`
+			} `json:"graphql"`
+		} `json:"ProfilePage"`
+	} `json:"entry_data"`
 }
 
 // type StoryJSON struct {
@@ -353,6 +372,14 @@ func newPost(path string, fi os.FileInfo) (PostJSON, error) {
 		post = PostJSON{}
 		err = json.Unmarshal(file, &post)
 		check(err)
+
+		// Complete Onwer info if missing
+		if post.Node.Owner.ProfilePicURL == "" || post.Node.Owner.FullName == "" || post.Node.Owner.UserName == "" {
+			log.Println(post.Node.Owner)
+			post.getOwnerInfo()
+			log.Println(post.Node.Owner)
+		}
+
 		return post, nil
 	case ".png":
 		// log.Println("got .png")
@@ -407,4 +434,59 @@ func instaLoader() {
 		time.Sleep(sleepTime)
 
 	}
+}
+
+func (post *PostJSON) getOwnerInfo() error {
+	re := regexp.MustCompile(`<script type="text/javascript">window[.]_sharedData = {[\s\S]*};</script>`)
+	// regex := /<script type="text\/javascript">window[.]_sharedData = {[\s\S]*};<\/script>/g
+	if post.Node.Shortcode == "" {
+		return errors.New("Shortcode missing")
+	}
+
+	postURL := `https://www.instagram.com/p/` + post.Node.Shortcode + "/"
+	log.Println(postURL)
+	resp, err := http.Get(postURL)
+	if err != nil {
+		return errors.Wrap(err, "Instagram get request failed")
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	sharedData := re.FindStringSubmatch(string(body))
+
+	if len(sharedData) < 1 {
+		return errors.New("Post missing")
+		// log.Println(re)
+		// log.Println(string(body))
+		// log.Println(sharedData)
+	}
+
+	re1 := regexp.MustCompile(`\{[\s\S]*\}`)
+
+	jsonString := re1.FindStringSubmatch(sharedData[0])
+
+	onwerInfo := OwnerInfoJSON{}
+
+	log.Println(jsonString[0])
+
+	err = json.Unmarshal([]byte(jsonString[0]), &onwerInfo)
+
+	log.Println(onwerInfo)
+
+	if err != nil {
+		errors.Wrap(err, "getOwnerInfo could not unmarshal request body")
+	}
+
+	// log.Println(post.Node.Owner)
+
+	post.Node.Owner.FullName = onwerInfo.Node.Page[0].Graphql.User.FullName
+	post.Node.Owner.UserName = onwerInfo.Node.Page[0].Graphql.User.UserName
+	post.Node.Owner.ProfilePicURL = onwerInfo.Node.Page[0].Graphql.User.ProfilePicURL
+
+	return nil
+}
+
+func (post *PostJSON) loadUserInfo() {
+
 }
