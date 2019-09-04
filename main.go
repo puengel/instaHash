@@ -412,8 +412,8 @@ func instaLoader() {
 	var argsHashtag []string
 
 	// GET only json metaData
-	argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--no-video-thumbnails", "--no-captions", "--count=10"}
-	argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--no-video-thumbnails", "--no-captions", "--count=10"}
+	argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--count=10", "--dirname-pattern=stories"}
+	argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--count=10", "--dirname-pattern=hashtag"}
 	// argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
 	// argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
 
