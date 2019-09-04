@@ -1,0 +1,206 @@
+{
+  "config": {
+    "csrf_token": "SaPhKvMZe6So9Ce0ta00xqxV18gdzggM",
+    "viewer": null,
+    "viewerId": null
+  },
+  "country_code": "DE",
+  "language_code": "en",
+  "locale": "en_US",
+  "entry_data": {
+    "ProfilePage": [
+      {
+        "logging_page_id": "profilePage_17909434058",
+        "show_suggested_profiles": false,
+        "show_follow_dialog": false,
+        "toast_content_on_load": null,
+        "graphql": {
+          "user": {
+            "biography": "",
+            "blocked_by_viewer": false,
+            "country_block": false,
+            "external_url": null,
+            "external_url_linkshimmed": null,
+            "edge_followed_by": { "count": 1 },
+            "followed_by_viewer": false,
+            "edge_follow": { "count": 1 },
+            "follows_viewer": false,
+            "full_name": "tstst",
+            "has_channel": false,
+            "has_blocked_viewer": false,
+            "highlight_reel_count": 0,
+            "has_requested_viewer": false,
+            "id": "17909434058",
+            "is_business_account": false,
+            "is_joined_recently": true,
+            "business_category_name": null,
+            "is_private": true,
+            "is_verified": false,
+            "edge_mutual_followed_by": { "count": 0, "edges": [] },
+            "profile_pic_url": "https://instagram.ftse2-1.fna.fbcdn.net/vp/263e41c40bdddc41cd5fdaed44e180f9/5DF2B4F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftse2-1.fna.fbcdn.net",
+            "profile_pic_url_hd": "https://instagram.ftse2-1.fna.fbcdn.net/vp/263e41c40bdddc41cd5fdaed44e180f9/5DF2B4F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftse2-1.fna.fbcdn.net",
+            "requested_by_viewer": false,
+            "username": "t.daniel.puengel",
+            "connected_fb_page": null,
+            "edge_felix_video_timeline": {
+              "count": 0,
+              "page_info": { "has_next_page": false, "end_cursor": null },
+              "edges": []
+            },
+            "edge_owner_to_timeline_media": {
+              "count": 1,
+              "page_info": { "has_next_page": false, "end_cursor": null },
+              "edges": []
+            },
+            "edge_saved_media": {
+              "count": 0,
+              "page_info": { "has_next_page": false, "end_cursor": null },
+              "edges": []
+            },
+            "edge_media_collections": {
+              "count": 0,
+              "page_info": { "has_next_page": false, "end_cursor": null },
+              "edges": []
+            }
+          }
+        }
+      }
+    ]
+  },
+  "hostname": "www.instagram.com",
+  "deployment_stage": "c2",
+  "platform": "web",
+  "nonce": "RQ/WauJPW4JIMW58ev0nEg==",
+  "mid_pct": 29.52785,
+  "zero_data": {},
+  "cache_schema_version": 3,
+  "server_checks": {},
+  "knobs": { "acct:ntb": 0, "cb": 0, "captcha": 0, "fr": 0 },
+  "knobx": {},
+  "to_cache": {
+    "gatekeepers": {
+      "4": true,
+      "5": false,
+      "6": false,
+      "7": false,
+      "8": false,
+      "9": false,
+      "10": false,
+      "11": false,
+      "12": false,
+      "13": true,
+      "14": true,
+      "15": true,
+      "16": false,
+      "18": true,
+      "19": false,
+      "23": false,
+      "24": false,
+      "26": true,
+      "27": false,
+      "28": false,
+      "29": true,
+      "31": false,
+      "32": true,
+      "34": false,
+      "35": false,
+      "37": true,
+      "38": true,
+      "39": true,
+      "40": true,
+      "41": false,
+      "43": false,
+      "45": false,
+      "46": true,
+      "57": false
+    },
+    "qe": {
+      "app_upsell": { "g": "", "p": {} },
+      "igl_app_upsell": { "g": "", "p": {} },
+      "notif": { "g": "", "p": {} },
+      "log_cont": {
+        "g": "test_intent_m_42",
+        "p": { "has_contextual_d": "false", "has_contextual_m": "true" }
+      },
+      "onetaplogin": { "g": "", "p": {} },
+      "onetap": { "g": "", "p": {} },
+      "multireg_iter": { "g": "", "p": {} },
+      "felix_clear_fb_cookie": { "g": "", "p": {} },
+      "felix_creation_duration_limits": { "g": "", "p": {} },
+      "felix_creation_fb_crossposting": { "g": "", "p": {} },
+      "felix_creation_fb_crossposting_v2": { "g": "", "p": {} },
+      "felix_creation_validation": { "g": "", "p": {} },
+      "mweb_topical_explore": { "g": "", "p": {} },
+      "post_options": { "g": "", "p": {} },
+      "iglscioi": { "g": "", "p": {} },
+      "wss2": { "g": "", "p": {} },
+      "sticker_tray": { "g": "", "p": {} },
+      "web_sentry": { "g": "", "p": {} },
+      "0": {
+        "p": { "0": true, "4": true, "7": true, "8": true, "9": false },
+        "qex": true
+      },
+      "2": { "p": { "0": true }, "qex": true },
+      "4": { "p": { "0": true }, "qex": true },
+      "5": { "p": { "1": false }, "qex": true },
+      "6": {
+        "p": {
+          "1": true,
+          "5": false,
+          "6": false,
+          "7": false,
+          "9": false,
+          "10": false
+        },
+        "qex": true
+      },
+      "7": { "p": { "0": false }, "qex": true },
+      "10": { "p": { "2": false }, "qex": true },
+      "11": { "p": { "0": true }, "qex": true },
+      "12": { "p": { "0": 5 }, "qex": true },
+      "13": { "p": { "0": true }, "qex": true },
+      "16": { "p": { "0": false }, "qex": true },
+      "17": { "p": { "1": true }, "qex": true },
+      "18": { "p": { "0": false, "1": false }, "qex": true },
+      "19": { "p": { "0": true }, "qex": true },
+      "21": { "p": { "2": false }, "qex": true },
+      "22": {
+        "p": {
+          "0": false,
+          "1": false,
+          "2": 8.0,
+          "3": 0.85,
+          "4": 0.95,
+          "5": 10.0,
+          "7": false
+        },
+        "qex": true
+      },
+      "23": { "p": { "0": false, "1": false }, "qex": true },
+      "25": { "p": {}, "qex": true },
+      "26": { "p": { "0": "" }, "qex": true },
+      "27": { "p": { "0": false }, "qex": true },
+      "28": { "p": { "0": false }, "qex": true },
+      "29": { "p": {}, "qex": true },
+      "30": { "p": { "0": true }, "qex": true },
+      "31": { "p": {}, "qex": true },
+      "33": { "p": {}, "qex": true },
+      "34": { "p": { "0": false }, "qex": true },
+      "36": {
+        "p": { "0": false, "1": false, "2": false, "3": false },
+        "qex": true
+      },
+      "37": { "p": { "0": false }, "qex": true },
+      "38": { "p": { "0": false }, "qex": true },
+      "39": { "p": { "0": false }, "qex": true },
+      "40": { "p": { "0": false }, "qex": true },
+      "41": { "p": {}, "qex": true },
+      "42": { "p": {}, "qex": true }
+    },
+    "probably_has_app": false,
+    "cb": true
+  },
+  "rollout_hash": "086cfef91e6a",
+  "bundle_variant": "metro",
+  "is_canary": false
+}

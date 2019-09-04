@@ -12,7 +12,7 @@ interface HomeState {
   gridsize: number;
 }
 
-const client = new W3CWebSocket(`ws://${window.location.hostname}:8080/posts`);
+const client = new W3CWebSocket(`ws://${window.location.hostname}:8081/posts`);
 
 class Home extends React.Component<HomeProps, HomeState> {
 

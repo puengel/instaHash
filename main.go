@@ -90,6 +90,7 @@ type PostJSON struct {
 			FullName      string `json:"full_name"`
 			UserName      string `json:"username"`
 			ProfilePicURL string `json:"profile_pic_url"`
+			ID            string `json:"id"`
 		} `json:"owner"`
 		TakenAtTimestamp int    `json:"taken_at_timestamp"`
 		IsVideo          bool   `json:"is_video"`
@@ -134,6 +135,15 @@ type OwnerInfoJSON struct {
 			} `json:"graphql"`
 		} `json:"ProfilePage"`
 	} `json:"entry_data"`
+}
+
+//UserInfoJSON :)
+type UserInfoJSON struct {
+	User struct {
+		Username      string `json:"username"`
+		ProfilePicURL string `json:"profile_pic_url"`
+	} `json:"user"`
+	Status string `json:"status"`
 }
 
 // type StoryJSON struct {
@@ -228,12 +238,12 @@ func postSocket(w http.ResponseWriter, r *http.Request) {
 		// ReadMessages
 		var event SocketEvent
 		_, message, err := c.ReadMessage()
-		errz.Log(err, "ElectronSocket: [err]")
+		errz.Log(err, "WebSocket: [err]")
 
 		//Handle Message
 		err = json.Unmarshal(message, &event)
 		errz.Fatal(err, "Unmashal: ")
-		log.Printf("ElectronSocket: [received] %+v", event)
+		log.Printf("WebSocket: [received] %+v", event)
 
 		//Shutdown Event
 		if event.Event == "posts" {
@@ -374,9 +384,9 @@ func newPost(path string, fi os.FileInfo) (PostJSON, error) {
 		check(err)
 
 		// Complete Onwer info if missing
-		if post.Node.Owner.ProfilePicURL == "" || post.Node.Owner.FullName == "" || post.Node.Owner.UserName == "" {
+		if post.Node.Owner.ProfilePicURL == "" || post.Node.Owner.UserName == "" {
 			log.Println(post.Node.Owner)
-			post.getOwnerInfo()
+			post.loadUserInfo()
 			log.Println(post.Node.Owner)
 		}
 
@@ -402,9 +412,10 @@ func instaLoader() {
 	var argsHashtag []string
 
 	// GET only json metaData
-	argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=50"}
-	argsHashtag = []string{instaloaderPath, "--login=230august", "#sunday", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=20"}
-	// argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--count=50"}
+	argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--no-video-thumbnails", "--no-captions", "--count=10"}
+	argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--no-video-thumbnails", "--no-captions", "--count=10"}
+	// argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
+	// argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
 
 	for {
 
@@ -427,6 +438,16 @@ func instaLoader() {
 		check(err)
 		err = cmdHashtag.Wait()
 		check(err)
+
+		// Round 3 get profiles
+		// cmdProfile := exec.Command("python3.6", argsProfiles...)
+		// cmdProfile.Stdout = os.Stdout
+		// cmdProfile.Stderr = os.Stderr
+		// cmdProfile.Dir = "./profiles"
+		// err = cmdProfile.Start()
+		// check(err)
+		// err = cmdProfile.Wait()
+		// check(err)
 
 		// Wait for next execution randomize to be sth around 60s
 		sleepTime := time.Duration(50+rand.Int63n(20)) * time.Second
@@ -487,6 +508,30 @@ func (post *PostJSON) getOwnerInfo() error {
 	return nil
 }
 
-func (post *PostJSON) loadUserInfo() {
+func (post *PostJSON) loadUserInfo() error {
+	log.Println("Start loadUserInfo")
 
+	loadURL := `https://i.instagram.com/api/v1/users/` + post.Node.Owner.ID + `/info/`
+
+	resp, err := http.Get(loadURL)
+	if err != nil {
+		return errors.Wrap(err, "Instagram api get request failed")
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	userInfo := UserInfoJSON{}
+
+	err = json.Unmarshal(body, &userInfo)
+
+	if userInfo.Status == "ok" {
+		post.Node.Owner.UserName = userInfo.User.Username
+		post.Node.Owner.ProfilePicURL = userInfo.User.ProfilePicURL
+	} else {
+		post.Node.Owner.UserName = "230august"
+		post.Node.Owner.ProfilePicURL = "https://instagram.fbkk9-2.fna.fbcdn.net/vp/7fe0496b9438def60d00bf531c63a65f/5DCB27F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.fbkk9-2.fna.fbcdn.net"
+	}
+
+	return nil
 }
