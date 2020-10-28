@@ -69,6 +69,7 @@ video {
 
 .col {
   display: flex;
+  position: relative;
   /* flex: 1; */
   /* width: 30%;
   height: 30%; */
@@ -78,7 +79,7 @@ video {
 
 .col-img,
 .col-img-multi {
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -95,6 +96,11 @@ video {
 .col-img,
 .col-inner {
   width: 50%;
+}
+
+.col-img.text-only,
+.col-inner.text-only {
+  width: 100%;
 }
 
 .info {
@@ -212,4 +218,26 @@ video {
 
 .home-header {
   font-size: 2rem;
+}
+
+.user-in-pic {
+  position: absolute;
+  left: 0;
+}
+
+.user-in-pic .post-author {
+  border-bottom: none;
+}
+
+.user-in-pic .post-author .post-author-name {
+  text-shadow:0px 1px 0 rgb(0,0,0),0px -1px 0 rgb(0,0,0),1px 0px 0 rgb(0,0,0),-1px 0px 0 rgb(0,0,0),1px 1px 0 rgb(0,0,0),1px -1px 0 rgb(0,0,0),-1px 1px 0 rgb(0,0,0),-1px -1px 0 rgb(0,0,0);
+  -webkit-text-shadow:0px 1px 0 rgb(0,0,0),0px -1px 0 rgb(0,0,0),1px 0px 0 rgb(0,0,0),-1px 0px 0 rgb(0,0,0),1px 1px 0 rgb(0,0,0),1px -1px 0 rgb(0,0,0),-1px 1px 0 rgb(0,0,0),-1px -1px 0 rgb(0,0,0);
+  -moz-text-shadow:0px 1px 0 rgb(0,0,0),0px -1px 0 rgb(0,0,0),1px 0px 0 rgb(0,0,0),-1px 0px 0 rgb(0,0,0),1px 1px 0 rgb(0,0,0),1px -1px 0 rgb(0,0,0),-1px 1px 0 rgb(0,0,0),-1px -1px 0 rgb(0,0,0);
+  font-size:16px;
+  color:rgb(255, 255, 255);
+  font-family:"Times New Roman", Times, serif;
+}
+
+.user-in-pic .post-author .post-author-pic {
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0, 1);
 }

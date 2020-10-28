@@ -12,15 +12,15 @@ interface HomeState {
   gridsize: number;
 }
 
-const client = new W3CWebSocket(`ws://${window.location.hostname}:8081/posts`);
+let client: W3CWebSocket;
 
 class Home extends React.Component<HomeProps, HomeState> {
 
   constructor(props: HomeProps) {
     super(props);
 
-    let w = Math.floor(window.innerWidth / 600);
-    let h = Math.floor(window.innerHeight / 300);
+    let w = Math.floor(window.innerWidth / 900);
+    let h = Math.floor(window.innerHeight / 450);
 
     this.state = {
       posts: [],
@@ -31,10 +31,15 @@ class Home extends React.Component<HomeProps, HomeState> {
   }
 
   componentDidMount() {
+    this.connectSocket();
+  }
+
+  connectSocket = () => {
+    client = new W3CWebSocket(`ws://${window.location.hostname}:8081/posts`);
     client.onopen = () => {
       console.log('WebSocket Client Connected');
 
-      client.send(JSON.stringify({ "Event": "posts", "Data": "50" }));
+      client.send(JSON.stringify({ "Event": "posts", "Data": this.state.gridsize * 2 }));
     };
     client.onmessage = (message) => {
       console.log(message);
@@ -56,6 +61,9 @@ class Home extends React.Component<HomeProps, HomeState> {
           this.state.posts.sort((a, b) => {
             return b.node.taken_at_timestamp - a.node.taken_at_timestamp;
           })
+          while (this.state.posts.length > this.state.gridsize * 2){
+            this.state.posts.pop();
+          }
           this.setState((state) => ({
             posts: state.posts
           }));
@@ -64,6 +72,15 @@ class Home extends React.Component<HomeProps, HomeState> {
           console.log(`Unknown event: ${parsed.Event}`);
       }
     };
+
+    // Try Reconnect in any case
+    client.onerror = (err: Error) => {
+      // console.log(err);
+      this.connectSocket();
+    }
+    client.onclose = () => {
+      this.connectSocket();
+    }
   }
 
   carousel = (index: number, sliderClass: string) => {
@@ -86,12 +103,14 @@ class Home extends React.Component<HomeProps, HomeState> {
     // console.log(this.state.hash);
     const { posts, gw, gh } = this.state;
     let colW = `calc(${Math.floor(100 / gw)}% - 10px)`;
+    let noTextColW = `calc(${Math.floor(50 / gw)}% - 10px)`
     let colH = `calc(${Math.floor(100 / gh)}% - 10px)`;
+    let count = 0;
     return (
       <div className="flex-grid">
         {
           posts.map((post: any, idx: number) => {
-            if (idx >= this.state.gridsize) {
+            if (count >= this.state.gridsize) {
               return
             }
             console.log(post);
@@ -102,14 +121,20 @@ class Home extends React.Component<HomeProps, HomeState> {
               );
             }
 
+            let hasText = post.node && post.node.media_to_caption &&
+            post.node.edge_media_to_caption.edges && post.node.edge_media_to_caption.edges[0] &&
+            post.node.edge_media_to_caption.edges[0].node && post.node.edge_media_to_caption.edges[0].node.text;
+
+            count += hasText ? 1 : 0.5;
+
             return (
-              <div className="col" style={{ width: colW, height: colH }} key={idx} >
+              <div className="col" style={{ width: hasText ? colW : noTextColW, height: colH }} key={post.node.id} >
                 {
                   (!post.node.is_video && post.node.display_url && (!post.node.edge_sidecar_to_children || !post.node.edge_sidecar_to_children.edges)) ? (
-                    <div className="col-img" style={{ backgroundImage: `url(${post.node.display_url})` }}></div>
+                    <div className={`col-img${hasText ? "": " text-only"}`} style={{ backgroundImage: `url(${post.node.display_url})` }} key={`${post.node.id}pic`}></div>
 
                   ) : (
-                      <div className="col-inner">
+                      <div className={`col-inner${hasText ? "": " text-only"}`} key={`${post.node.id}vidormulti`}>
                         {
                           (post.node.edge_sidecar_to_children && post.node.edge_sidecar_to_children.edges) ? (
                             <div className="col-img-multi-container">
@@ -144,6 +169,9 @@ class Home extends React.Component<HomeProps, HomeState> {
                       </div>
                     )
                 }
+                {
+                  hasText ?
+                
                 <div className="info">
                   <div className="post-author" >
                     <div className="post-author-pic" style={{ backgroundImage: `url(${post.node.owner.profile_pic_url})` }}></div>
@@ -183,6 +211,14 @@ class Home extends React.Component<HomeProps, HomeState> {
 
                   </div>
                 </div>
+                :
+                <div className="user-in-pic">
+                  <div className="post-author" >
+                    <div className="post-author-pic" style={{ backgroundImage: `url(${post.node.owner.profile_pic_url})` }}></div>
+                    <div className="post-author-name">{post.node.owner.username}</div>
+                  </div>
+                  </div>
+          }
               </div>
             )
           })

@@ -24,14 +24,20 @@ import (
 
 //GLOBALS
 
-const user = "230august"
-const hashtag = "230august"
+const user = "svvxmas"
+const hashtag = "svvxmas"
 
 //
 var watcher *fsnotify.Watcher
 
 //FileWorkerPipe to handle new posts between goroutines
 var FileWorkerPipe = make(chan PostJSON)
+
+//AddConn Pipe to add Conns
+var AddConn = make(chan *websocket.Conn)
+
+//RemoveConn Pipe to remove Conns
+var RemoveConn = make(chan *websocket.Conn)
 
 var upgrader = websocket.Upgrader{ //Upgrader for websockets
 	ReadBufferSize:  1024,
@@ -162,6 +168,9 @@ func main() {
 	// run instaloader once every minute
 	go instaLoader()
 
+	// run connection worker
+	go connWorker()
+
 	// Handle new Posts in FileSystem
 	fileWorker()
 }
@@ -204,33 +213,7 @@ func postSocket(w http.ResponseWriter, r *http.Request) {
 	errz.Fatal(err)
 	defer c.Close()
 
-	//Writer
-	writerTask := GORunner(func(stop StopChan, finish Finish) {
-		for {
-			var post PostJSON
-			select {
-			case post = <-FileWorkerPipe:
-				log.Printf("Has Option Request")
-				log.Printf("Sending Post")
-
-				event := SocketEvent{
-					Event: "post",
-					Data:  post}
-
-				err = c.WriteJSON(event)
-				errz.Log(err)
-			case _, ok := <-stop:
-				if !ok {
-					finish()
-					return
-				}
-
-			}
-		}
-	})
-
-	defer writerTask.Stop()
-	defer writerTask.Wait()
+	AddConn <- c
 
 	//Reader
 	for {
@@ -238,7 +221,12 @@ func postSocket(w http.ResponseWriter, r *http.Request) {
 		// ReadMessages
 		var event SocketEvent
 		_, message, err := c.ReadMessage()
-		errz.Log(err, "WebSocket: [err]")
+		if err != nil {
+			errz.Log(err, "WebSocket: [err]")
+
+			RemoveConn <- c
+			break
+		}
 
 		//Handle Message
 		err = json.Unmarshal(message, &event)
@@ -250,9 +238,33 @@ func postSocket(w http.ResponseWriter, r *http.Request) {
 			log.Println("Request: \"posts\"")
 			// log.Println(event.Data)
 
-			log.Println(postBuffer)
+			requested, ok := event.Data.(int)
+			if !ok {
+				requested = 20
+			}
 
-			posts := postBuffer[len(postBuffer)-20:]
+			// log.Println(postBuffer)
+
+			bufferLength := len(postBuffer)
+
+			var posts []PostJSON
+
+			// // get last 10 posts
+			// for i := bufferLength; i > 0 && len(posts) <= 10; i-- {
+			// 	posts = append(posts, postBuffer[i])
+			// }
+
+			// log.Println("got here")
+
+			// posts = postBuffer[bufferLength-10:]
+			if bufferLength > requested {
+				posts = postBuffer[bufferLength-requested:]
+			} else {
+				posts = postBuffer
+			}
+
+			// log.Println(posts)
+
 			// for k, v := range postBuffer {
 			// 	log.Println(k)
 			// 	posts = append(posts, v)
@@ -289,6 +301,48 @@ func postSocket(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+}
+
+func connWorker() {
+
+	//ConnCients
+	var ConnClients = make(map[*websocket.Conn]bool)
+
+	//Writer
+	// writerTask := GORunner(func(stop StopChan, finish Finish) {
+	for {
+		var post PostJSON
+		select {
+		case newConn := <-AddConn:
+			ConnClients[newConn] = true
+		case removeConn := <-RemoveConn:
+			if _, ok := ConnClients[removeConn]; ok {
+				delete(ConnClients, removeConn)
+				removeConn.Close()
+			}
+		case post = <-FileWorkerPipe:
+			log.Printf("Sending Post")
+
+			event := SocketEvent{
+				Event: "post",
+				Data:  post}
+
+			for c := range ConnClients {
+				err := c.WriteJSON(event)
+				errz.Log(err)
+			}
+			// case _, ok := <-stop:
+			// 	if !ok {
+			// 		finish()
+			// 		return
+			// 	}
+
+		}
+	}
+	// })
+
+	// defer writerTask.Stop()
+	// defer writerTask.Wait()
 }
 
 func fileWorker() {
@@ -385,9 +439,9 @@ func newPost(path string, fi os.FileInfo) (PostJSON, error) {
 
 		// Complete Onwer info if missing
 		if post.Node.Owner.ProfilePicURL == "" || post.Node.Owner.UserName == "" {
-			log.Println(post.Node.Owner)
+			// log.Println(post.Node.Owner)
 			post.loadUserInfo()
-			log.Println(post.Node.Owner)
+			// log.Println(post.Node.Owner)
 		}
 
 		return post, nil
@@ -412,15 +466,16 @@ func instaLoader() {
 	var argsHashtag []string
 
 	// GET only json metaData
-	argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--count=10", "--dirname-pattern=stories"}
-	argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--count=10", "--dirname-pattern=hashtag"}
-	// argsStories = []string{instaloaderPath, "--login=230august", ":stories", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
-	// argsHashtag = []string{instaloaderPath, "--login=230august", "#230august", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
+	argsStories = []string{instaloaderPath, "--login=svvxmas", "--password", "svvbeschde", ":stories", "--no-compress-json", "--count=10", "--dirname-pattern=stories"}
+	argsHashtag = []string{instaloaderPath, "--login=svvxmas", "--password", "svvbeschde", "#svvxmas", "--no-compress-json", "--count=10", "--dirname-pattern=hashtag"}
+	// argsStories = []string{instaloaderPath, "--login=svvxmas", ":stories", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
+	// argsHashtag = []string{instaloaderPath, "--login=svvxmas", "#svvxmas", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
+	// python ./submodules/instaloader/instaloader.py --login svvxmas --password svvbeschde :stories --no-compress-json --count=10 --dirname-pattern=stories
 
 	for {
 
 		// Round 1 get Stories
-		cmdStory := exec.Command("python3.6", argsStories...)
+		cmdStory := exec.Command("python", argsStories...)
 		cmdStory.Stdout = os.Stdout
 		cmdStory.Stderr = os.Stderr
 		cmdStory.Dir = "./posts"
@@ -430,7 +485,7 @@ func instaLoader() {
 		check(err)
 
 		// Round 2 get Hashtag
-		cmdHashtag := exec.Command("python3.6", argsHashtag...)
+		cmdHashtag := exec.Command("python", argsHashtag...)
 		cmdHashtag.Stdout = os.Stdout
 		cmdHashtag.Stderr = os.Stderr
 		cmdHashtag.Dir = "./posts"
@@ -451,6 +506,7 @@ func instaLoader() {
 
 		// Wait for next execution randomize to be sth around 60s
 		sleepTime := time.Duration(50+rand.Int63n(20)) * time.Second
+		// sleepTime := time.Duration(50+rand.Int63n(20)) * time.Minute
 		log.Printf("Waitduration: %d", sleepTime)
 		time.Sleep(sleepTime)
 
@@ -529,8 +585,8 @@ func (post *PostJSON) loadUserInfo() error {
 		post.Node.Owner.UserName = userInfo.User.Username
 		post.Node.Owner.ProfilePicURL = userInfo.User.ProfilePicURL
 	} else {
-		post.Node.Owner.UserName = "230august"
-		post.Node.Owner.ProfilePicURL = "https://instagram.fbkk9-2.fna.fbcdn.net/vp/7fe0496b9438def60d00bf531c63a65f/5DCB27F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.fbkk9-2.fna.fbcdn.net"
+		post.Node.Owner.UserName = "svvxmas"
+		post.Node.Owner.ProfilePicURL = "https://instagram.fham6-1.fna.fbcdn.net/vp/32bcd4ed93f0bef8a84b483f15821739/5E6D600D/t51.2885-19/s320x320/72206765_500740107209544_2749363425510424576_n.jpg?_nc_ht=instagram.fham6-1.fna.fbcdn.net"
 	}
 
 	return nil
