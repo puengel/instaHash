@@ -1,6 +1,8 @@
 node_modules
 instaHashCrawl
 posts
+vendor
+/session-**
 
 .vscode
 

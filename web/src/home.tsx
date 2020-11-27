@@ -35,7 +35,7 @@ class Home extends React.Component<HomeProps, HomeState> {
   }
 
   connectSocket = () => {
-    client = new W3CWebSocket(`ws://${window.location.hostname}:8081/posts`);
+    client = new W3CWebSocket(`ws://${window.location.hostname}:8080/posts`);
     client.onopen = () => {
       console.log('WebSocket Client Connected');
 
@@ -43,7 +43,7 @@ class Home extends React.Component<HomeProps, HomeState> {
     };
     client.onmessage = (message) => {
       console.log(message);
-      let parsed = JSON.parse(message.data);
+      let parsed = JSON.parse(message.data as string);
       switch (parsed.Event) {
         case "posts":
           console.log("got posts");
@@ -75,12 +75,12 @@ class Home extends React.Component<HomeProps, HomeState> {
 
     // Try Reconnect in any case
     client.onerror = (err: Error) => {
-      // console.log(err);
-      this.connectSocket();
     }
     client.onclose = () => {
-      this.connectSocket();
-    }
+      console.log("Connection closed. Attemt to reconnect...");
+      
+      setTimeout(() => this.connectSocket(), 5000);
+    }   
   }
 
   carousel = (index: number, sliderClass: string) => {
@@ -99,6 +99,15 @@ class Home extends React.Component<HomeProps, HomeState> {
     setTimeout(() => { this.carousel(index, sliderClass); }, 10000); // Change image every 2 seconds
   }
 
+  fileEnding = (file: string): string => {
+    console.log(file);
+    const find = file.match(/(\.\w+)\?/g)
+    if (find) {
+      return find[0]
+    }
+    return ".jpg"
+  }
+
   render() {
     // console.log(this.state.hash);
     const { posts, gw, gh } = this.state;
@@ -106,6 +115,7 @@ class Home extends React.Component<HomeProps, HomeState> {
     let noTextColW = `calc(${Math.floor(50 / gw)}% - 10px)`
     let colH = `calc(${Math.floor(100 / gh)}% - 10px)`;
     let count = 0;
+    let imgBase = window.location.origin;
     return (
       <div className="flex-grid">
         {
@@ -131,7 +141,7 @@ class Home extends React.Component<HomeProps, HomeState> {
               <div className="col" style={{ width: hasText ? colW : noTextColW, height: colH }} key={post.node.id} >
                 {
                   (!post.node.is_video && post.node.display_url && (!post.node.edge_sidecar_to_children || !post.node.edge_sidecar_to_children.edges)) ? (
-                    <div className={`col-img${hasText ? "": " text-only"}`} style={{ backgroundImage: `url(${post.node.display_url})` }} key={`${post.node.id}pic`}></div>
+                    <div className={`col-img${hasText ? "": " text-only"}`} style={{ backgroundImage: `url(${imgBase}/imgs/${post.name}${this.fileEnding(post.node.display_url)})` }} key={`${post.node.id}pic`}></div>
 
                   ) : (
                       <div className={`col-inner${hasText ? "": " text-only"}`} key={`${post.node.id}vidormulti`}>
@@ -144,7 +154,7 @@ class Home extends React.Component<HomeProps, HomeState> {
                                 }, 10000) &&
                                 post.node.edge_sidecar_to_children && post.node.edge_sidecar_to_children.edges.map((edge: any, urlIdx: number) => {
                                   return (
-                                    <div className={`col-img-multi slide-img-${idx}${urlIdx === 0 ? " show" : ""}`} style={{ backgroundImage: `url(${edge.node.display_url})` }} key={urlIdx}></div>
+                                    <div className={`col-img-multi slide-img-${idx}${urlIdx === 0 ? " show" : ""}`} style={{ backgroundImage: `url(${imgBase}/imgs/${post.name}_${urlIdx + 1}${this.fileEnding(edge.node.display_url)})` }} key={urlIdx}></div>
                                   );
                                 })
 
@@ -152,12 +162,12 @@ class Home extends React.Component<HomeProps, HomeState> {
                             </div>
                           ) :
                             (
-                              <video preload="auto" playsInline muted autoPlay controls={false} loop className="col-vid" poster={post.node.display_url}>
+                              <video preload="auto" playsInline muted autoPlay controls={false} loop className="col-vid" poster={`${imgBase}/imgs/${post.name}${this.fileEnding(post.node.display_url)}`}>
                                 {
                                   post.node.video_resources &&
                                   post.node.video_resources.map((res: any) => {
                                     return (
-                                      <source src={res.src} key={res.src} />
+                                      <source src={`${imgBase}/imgs/${post.name}${this.fileEnding(res.src)}`} key={`${imgBase}/imgs/${post.name}${this.fileEnding(post.node.display_url)}`} />
                                     )
                                   })
                                 }

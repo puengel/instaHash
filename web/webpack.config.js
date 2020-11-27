@@ -6,7 +6,7 @@ var configuration = {
    * recursively go through every "require" statement in app.ts and
    * efficiently build out the application's dependency tree.
    */
-  entry: ["./src/app.tsx"],
+  entry: [ path.resolve(__dirname, "src/app.tsx")],
 
   mode: "development",
   /*
@@ -42,13 +42,14 @@ var configuration = {
     rules: [
       {
         test: /\.css$/,
-        loaders: ["style-loader"],
+        loader: "style-loader",
         include: __dirname + "/src",
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        loader: "typings-for-css-modules-loader?modules&namedExport&camelCase",
+        resourceQuery: 'modules&namedExport&camelCase',
+        loader: 'typings-for-css-modules-loader',
         exclude: /node_modules/
       },
       {

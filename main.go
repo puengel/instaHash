@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -26,6 +27,7 @@ import (
 
 const user = "svvxmas"
 const hashtag = "svvxmas"
+const deaultURL = "ihash.puengel.space"
 
 //
 var watcher *fsnotify.Watcher
@@ -81,6 +83,7 @@ const (
 
 //PostJSON I need this to marshall instaloader json files
 type PostJSON struct {
+	Name string `json:"name"`
 	Node struct {
 		Shortcode  string         `json:"shortcode"`
 		ID         string         `json:"id"`
@@ -187,9 +190,12 @@ func fileServer() {
 	cs := http.FileServer(http.Dir("./web/build/css/"))
 	http.Handle("/css/", http.StripPrefix("/css", cs))
 
+	imgs := http.FileServer(http.Dir("./posts/"))
+	http.Handle("/imgs/", http.StripPrefix("/imgs/", imgs))
+
 	log.Println("serve")
 
-	err := http.ListenAndServe(":8081", nil)
+	err := http.ListenAndServe(":80", nil)
 	check(err)
 	log.Println("end")
 }
@@ -222,7 +228,7 @@ func postSocket(w http.ResponseWriter, r *http.Request) {
 		var event SocketEvent
 		_, message, err := c.ReadMessage()
 		if err != nil {
-			errz.Log(err, "WebSocket: [err]")
+			// errz.Log(err, "WebSocket: [err]")
 
 			RemoveConn <- c
 			break
@@ -236,7 +242,7 @@ func postSocket(w http.ResponseWriter, r *http.Request) {
 		//Shutdown Event
 		if event.Event == "posts" {
 			log.Println("Request: \"posts\"")
-			// log.Println(event.Data)
+			log.Println(event.Data)
 
 			requested, ok := event.Data.(int)
 			if !ok {
@@ -352,6 +358,10 @@ func fileWorker() {
 	watcher, _ = fsnotify.NewWatcher()
 	defer watcher.Close()
 
+	postsPath := filepath.Join(".", "posts")
+	// Ensure posts dir exists
+	os.MkdirAll(postsPath, os.ModePerm)
+
 	// starting at the root of the project, walk each file/directory searching for
 	// directories
 	if err := filepath.Walk("./posts", watchDir); err != nil {
@@ -444,6 +454,12 @@ func newPost(path string, fi os.FileInfo) (PostJSON, error) {
 			// log.Println(post.Node.Owner)
 		}
 
+		// Set post name to local file name
+		abs, _ := filepath.Abs(path)
+		parent := filepath.Base(filepath.Dir(abs))
+		name := strings.TrimSuffix(filepath.Base(path), ext)
+		resPath := filepath.Join(parent, name)
+		post.Name = resPath
 		return post, nil
 	case ".png":
 		// log.Println("got .png")
@@ -461,13 +477,15 @@ func newPost(path string, fi os.FileInfo) (PostJSON, error) {
 
 func instaLoader() {
 	log.Println("Start instaloader routine")
-	instaloaderPath := "../submodules/instaloader/instaloader.py"
+	// instaloaderPath := "../submodules/instaloader/instaloader.py"
 	var argsStories []string
 	var argsHashtag []string
+	var argFeed []string
 
 	// GET only json metaData
-	argsStories = []string{instaloaderPath, "--login=svvxmas", "--password", "svvbeschde", ":stories", "--no-compress-json", "--count=10", "--dirname-pattern=stories"}
-	argsHashtag = []string{instaloaderPath, "--login=svvxmas", "--password", "svvbeschde", "#svvxmas", "--no-compress-json", "--count=10", "--dirname-pattern=hashtag"}
+	argsStories = []string{"--login=svvxmas", "--sessionfile=../session-svvxmas", ":stories", "--no-compress-json", "--count=10", "--dirname-pattern=stories"}
+	argsHashtag = []string{"--login=svvxmas", "--sessionfile=../session-svvxmas", "#svvxmas", "--no-compress-json", "--count=10", "--dirname-pattern=hashtag"}
+	argFeed = []string{"--login=svvxmas", "--sessionfile=../session-svvxmas", ":feed", "--no-compress-json", "--count=10", "--dirname-pattern=feed"}
 	// argsStories = []string{instaloaderPath, "--login=svvxmas", ":stories", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
 	// argsHashtag = []string{instaloaderPath, "--login=svvxmas", "#svvxmas", "--no-compress-json", "--no-pictures", "--no-videos", "--no-video-thumbnails", "--no-captions", "--count=10"}
 	// python ./submodules/instaloader/instaloader.py --login svvxmas --password svvbeschde :stories --no-compress-json --count=10 --dirname-pattern=stories
@@ -475,7 +493,7 @@ func instaLoader() {
 	for {
 
 		// Round 1 get Stories
-		cmdStory := exec.Command("python", argsStories...)
+		cmdStory := exec.Command("instaloader", argsStories...)
 		cmdStory.Stdout = os.Stdout
 		cmdStory.Stderr = os.Stderr
 		cmdStory.Dir = "./posts"
@@ -485,13 +503,23 @@ func instaLoader() {
 		check(err)
 
 		// Round 2 get Hashtag
-		cmdHashtag := exec.Command("python", argsHashtag...)
+		cmdHashtag := exec.Command("instaloader", argsHashtag...)
 		cmdHashtag.Stdout = os.Stdout
 		cmdHashtag.Stderr = os.Stderr
 		cmdHashtag.Dir = "./posts"
 		err = cmdHashtag.Start()
 		check(err)
 		err = cmdHashtag.Wait()
+		check(err)
+
+		// Round 3 get Feed
+		cmdFeed := exec.Command("instaloader", argFeed...)
+		cmdFeed.Stdout = os.Stdout
+		cmdFeed.Stderr = os.Stderr
+		cmdFeed.Dir = "./posts"
+		err = cmdFeed.Start()
+		check(err)
+		err = cmdFeed.Wait()
 		check(err)
 
 		// Round 3 get profiles
@@ -586,7 +614,7 @@ func (post *PostJSON) loadUserInfo() error {
 		post.Node.Owner.ProfilePicURL = userInfo.User.ProfilePicURL
 	} else {
 		post.Node.Owner.UserName = "svvxmas"
-		post.Node.Owner.ProfilePicURL = "https://instagram.fham6-1.fna.fbcdn.net/vp/32bcd4ed93f0bef8a84b483f15821739/5E6D600D/t51.2885-19/s320x320/72206765_500740107209544_2749363425510424576_n.jpg?_nc_ht=instagram.fham6-1.fna.fbcdn.net"
+		post.Node.Owner.ProfilePicURL = "https://instagram.ffra2-1.fna.fbcdn.net/v/t51.2885-19/s150x150/72206765_500740107209544_2749363425510424576_n.jpg?_nc_ht=instagram.ffra2-1.fna.fbcdn.net&_nc_ohc=bcsjdSGMpI0AX8yK2I3&tp=1&oh=f06cb42a9c2ec5026596d422690e9a97&oe=5FE8FD83"
 	}
 
 	return nil

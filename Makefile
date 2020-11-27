@@ -19,6 +19,9 @@ build-backend:
 install-ui:
 	@cd web && npm install
 
+install-python-stuff:
+	@pip3 install instaloader
+
 docker:
-	@sudo docker build --tag=instahash .
-	@sudo docker run -p 8080:8080 -e VIRTUALHOST=test.localhost instahash
+	@docker build --tag=instahash .
+	# @sudo docker run -p 8080:8080 -e VIRTUALHOST=test.localhost instahash
